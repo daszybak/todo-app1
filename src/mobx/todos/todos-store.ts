@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 import { nanoid } from "@reduxjs/toolkit";
 interface ToDo {
   id: string;
+  authorId: string;
   title: string;
   content: string;
   date: string;
@@ -14,9 +15,10 @@ class TodosStore {
     makeAutoObservable(this);
   }
 
-  addTodo(title: string, content: string) {
+  addTodo(title: string, content: string, authorId: string) {
     this.todos.push({
       id: nanoid(),
+      authorId,
       title,
       content,
       date: new Date().toISOString(),

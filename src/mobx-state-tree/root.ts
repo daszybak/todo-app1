@@ -1,14 +1,20 @@
 import { createContext, useContext } from "react";
 import { types, Instance, onSnapshot } from "mobx-state-tree";
 import { Todos } from "./todos/todos-model";
+import { Users } from "./users/users-model";
+import { users } from "../data/users";
 
 const RootModel = types.model("RootModel", {
   todos: Todos,
+  users: Users,
 });
 
 let initialState = RootModel.create({
   todos: {
     todos: [],
+  },
+  users: {
+    users: users,
   },
 });
 
@@ -23,7 +29,6 @@ if (data) {
 export const rootStore = initialState;
 
 onSnapshot(rootStore, (snapshot) => {
-  console.log("Snapshot: ", snapshot);
   localStorage.setItem("rootState", JSON.stringify(snapshot));
 });
 

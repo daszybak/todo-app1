@@ -2,12 +2,20 @@ import { useState } from "react";
 import { useStore } from "../root";
 
 const PostToDo = () => {
-  const { todos } = useStore();
+  const {
+    todos,
+    users: { users },
+  } = useStore();
   const [title, setTitle] = useState<string>("");
+  const [author, setAuthor] = useState<string>("");
   const [content, setContent] = useState<string>("");
 
   const handleTitleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+  };
+
+  const handleAuthorOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setAuthor(e.target.value);
   };
 
   const handleContentOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -16,11 +24,19 @@ const PostToDo = () => {
 
   const handleFormOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    todos.addTodo(title, content);
+    todos.addTodo(title, content, author);
     setContent("");
-
+    setAuthor("");
     setTitle("");
   };
+
+  const renderedUsers = users.map(({ id, name }) => {
+    return (
+      <option value={id} key={id}>
+        {name}
+      </option>
+    );
+  });
 
   return (
     <section>
@@ -35,6 +51,20 @@ const PostToDo = () => {
             value={title}
             onChange={handleTitleOnChange}
           />
+        </div>
+        <div>
+          <label htmlFor="user">Author: </label>
+          <select
+            name="user"
+            id="user"
+            value={author}
+            onChange={handleAuthorOnChange}
+          >
+            <>
+              <option value=""></option>
+              {renderedUsers}
+            </>
+          </select>
         </div>
         <div>
           <label htmlFor="content">Post Content: </label>
